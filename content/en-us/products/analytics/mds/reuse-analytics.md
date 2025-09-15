@@ -16,3 +16,5 @@ analytics.track('page_viewed', {
   section: 'overview'
 });
 ```
+
+![Salesforce Docs](../../../../media/salesforcedocs.png)
