@@ -1,0 +1,19 @@
+name: ImageUploadToAkamaiNetStorage
+on:
+  workflow_dispatch:
+    inputs:
+      FORCE_UPLOAD:
+        type: choice
+        description: "Do you want to upload all the images forcefully?"
+        options:
+          - "false"
+          - "true"
+  push:
+    paths: ["content/media/**"]
+
+jobs:
+  CallAkamaiUpload:
+    uses: salesforcedocs/required-reusable-workflow/.github/workflows/reusable_akamai_upload.yml@main
+    secrets: inherit
+    with:
+      FORCE_UPLOAD: ${{ github.event.inputs.FORCE_UPLOAD }}
