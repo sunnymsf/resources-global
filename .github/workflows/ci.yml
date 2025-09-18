@@ -1,0 +1,38 @@
+name: Running CI for Content Repo
+on:
+  push:
+    branches: ["main", "2*"]
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+jobs:
+  Test_Result:
+    runs-on: salesforcedocs-ubuntu
+    env:
+      SFDOCS_NPM_AUTH_TOKEN: "${{ secrets.SFDOCS_NPM_AUTH_TOKEN }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{secrets.NODE_VERSION}}
+
+      - name: Download Centralized Config
+        run: |
+          rm -f package.json
+          curl https://raw.githubusercontent.com/salesforcedocs/sfdocs-repo-build-config/main/package.json -L --silent --fail --retry 5 --retry-max-time 15 -H "Authorization: token ${{secrets.SFDOCS_CONFIG_TOKEN}}" -H "Accept: application/vnd.github.v3.raw" > package.json
+          curl https://raw.githubusercontent.com/salesforcedocs/sfdocs-repo-build-config/main/yarn.lock -L --silent --fail --retry 5 --retry-max-time 15 -H "Authorization: token ${{secrets.SFDOCS_CONFIG_TOKEN}}" -H "Accept: application/vnd.github.v3.raw" > yarn.lock
+          curl https://raw.githubusercontent.com/salesforcedocs/sfdocs-repo-build-config/main/template/npmrcfile -L --silent --fail --retry 5 --retry-max-time 15 -H "Authorization: token ${{secrets.SFDOCS_CONFIG_TOKEN}}" -H "Accept: application/vnd.github.v3.raw" > .npmrc
+
+
+      - name: Installing dependency
+        run: yarn install --frozen-lockfile
+
+      - name: Running test
+        run: |
+          yarn validate > log || (cat log;exit 1)
+          cat log

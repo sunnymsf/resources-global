@@ -1,0 +1,59 @@
+{
+  "name": "sfdocs-commons",
+  "version": "0.0.1",
+  "description": "This is the repository to host all reusable resources for SFDocs.",
+  "main": "index.js",
+  "author": "Sejal Parikh",
+  "dependencies": {
+    "@salesforcedevs/sfdocs-cli": "latest",
+    "@salesforcedevs/sfdocs-prettier": "latest",
+    "@salesforcedevs/theme-apihub": "latest",
+    "@salesforcedevs/sfdocs-validate": "latest",
+    "rimraf": "^3.0.2"
+  },
+  "resolutions": {
+    "@oclif/plugin-help": "3.2.10"
+  },
+  "scripts": {
+    "heroku-prebuild": "yarn clean && node sfdocs-repo-build-config/file-sync.js && echo \"web: yarn app-start\" > Procfile",
+    "heroku-postbuild": "sfdocs build . && yarn decompress && yarn cache-purge",
+    "build": "yarn install",
+    "clean": "yarn global add rimraf --ignore-engines && rimraf yarn.lock && rimraf dist/ && rimraf node_modules __lwr_cache__",
+    "presetup": "yarn clean && yarn file-sync-init && node sfdocs-repo-build-config/installProjectReqs.js",
+    "setup": "node sfdocs-repo-build-config/setup.js && exec $SHELL -l",
+    "postsetup": "yarn file-sync-init && yarn file-sync-cleanup",
+    "setup-internal": "yarn file-sync-cleanup",
+    "prestart": "(rimraf sfdocs-repo-build-config && (yarn check-project-req-update || echo \"PreStart: Node check failed\") && node sfdocs-repo-build-config/check-file.js) || echo \"Failed to run pre start checks\"",
+    "start": "volta run --node 20.18.2 yarn app-start || yarn app-start",
+    "check-project-req-update": "rimraf sfdocs-repo-build-config && git clone --depth 1 --single-branch -b main git@github.com:salesforcedocs/sfdocs-repo-build-config.git && node sfdocs-repo-build-config/installProjectReqs.js",
+    "validate": "sfdocs validate",
+    "pretest": "yarn prestart",
+    "test": "volta run --node 20.18.2 yarn validate || yarn validate",
+    "posttest": "volta run --node 20.18.2 yarn file-sync-cleanup",
+    "cache-purge": "bash ./purge.sh",
+    "file-sync-init": "rimraf sfdocs-repo-build-config && git clone --depth 1 --single-branch -b main git@github.com:salesforcedocs/sfdocs-repo-build-config.git && git update-index --skip-worktree package.json && node sfdocs-repo-build-config/file-sync.js",
+    "file-sync-cleanup": "rimraf sfdocs-repo-build-config",
+    "check-file-diff": "rimraf sfdocs-repo-build-config && git clone --depth 1 --single-branch -b main git@github.com:salesforcedocs/sfdocs-repo-build-config.git && node sfdocs-repo-build-config/check-file.js && rimraf sfdocs-repo-build-config",
+    "app-start": "NODE_OPTIONS=\"--max-old-space-size=6144\" VIEW_CACHE_SIZE=1 sfdocs preview",
+    "format": "prettier --write \"content/**/*.{js,ts,md}\" --loglevel \"error\"",
+    "compress": "sfdocs compress",
+    "decompress": "sfdocs decompress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/salesforcedocs/sfdocs-commons.git"
+  },
+  "license": "ISC",
+  "engines": {
+    "node": ">=20.18.2",
+    "yarn": ">=1.22.5 <=1.22.19"
+  },
+  "volta": {
+    "node": "20.18.2",
+    "yarn": "1.22.19"
+  },
+  "bugs": {
+    "url": "https://github.com/salesforcedocs/sfdocs-commons/issues"
+  },
+  "homepage": "https://sfdocs-help.herokuapp.com/"
+}
