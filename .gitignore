@@ -1,0 +1,11 @@
+node_modules
+yarn-error.log
+.idea/
+.package-lock.json
+__lwr_cache__
+yarn.lock
+.DS_Store
+*.DS_Store
+**/.DS_Store
+sfdocs-repo-build-config
+.codegenie
