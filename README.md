@@ -3,7 +3,7 @@ Resources Global is a central repostority in SFDocs framework containing all the
 
 ## Contents supported
 
-Resource Global supports the following reusable resources,
+Resources Global supports the following reusable resources,
 1. Inline properties yaml
 2. Markdown
 3. Images
