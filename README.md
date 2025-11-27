@@ -1,5 +1,5 @@
-# Resource Global
-Resource Global is a central repostority in SFDocs framework containing all the common reusable resources that can be used across all the cloud or product documentation.
+# Resources Global
+Resources Global is a central repostority in SFDocs framework containing all the common reusable resources that can be used across all the cloud or product documentation.
 
 ## Contents supported
 
