@@ -1,4 +1,4 @@
-## Description
+## Description Updated in main branch
 
 Analytics tracking is essential for understanding user behavior and improving product experiences. This guide covers common analytics patterns that can be reused across different documentation sections.
 
@@ -10,10 +10,10 @@ Track when users view specific documentation pages:
 
 ```javascript
 // Basic page view tracking
-analytics.track('page_viewed', {
-  page_title: 'Analytics Guide',
+analytics.track("page_viewed", {
+  page_title: "Analytics Guide",
   page_url: window.location.href,
-  section: 'overview'
+  section: "overview",
 });
 ```
 
